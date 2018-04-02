@@ -88,6 +88,30 @@ def to_bytes(obj, flags=PyBUF_FULL):
     return memoryview(PyBuffer(obj, flags)).tobytes()
 
 
+def check_buffer(obj):
+    try:
+        memoryview(obj)
+        return True
+    except TypeError:
+        return False
+
+
+class CDLL(ctypes.CDLL):
+    def __getattr__(self, name):
+        func = super().__getattr__(name)
+        def wrapped(*args):
+            newargs = []
+            for a in args:
+                # see https://docs.python.org/3/c-api/buffer.html#c.PyObject_CheckBuffer
+                if check_buffer(a) == 1:
+                    newargs.append(to_bytes(a))
+                else:
+                    newargs.append(a)
+            return func(*newargs)
+        setattr(self, name, wrapped)
+        return wrapped
+
+
 # PyBuffer functions in PythonAPI
 pyapi = ctypes.PyDLL("PythonAPI", handle=ctypes.pythonapi._handle)
 pyapi.PyObject_GetBuffer.argtypes = (ctypes.py_object,          # obj

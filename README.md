@@ -26,12 +26,11 @@ import ctypes
 import numpy
 import pybuffer
 
-lib = ctypes.CDLL("./libyour-dub-lib.so") # dynamic library written in d
 x = numpy.array([[0, 1, 2], [3, 4, 5]]).astype(numpy.float64)
 y = numpy.array([0, 1, 2]).astype(numpy.float64)
-err = lib.pybuffer_func1(pybuffer.to_bytes(x),
-                         pybuffer.to_bytes(y),
-                         ctypes.c_double(2.0))
+# load dynamic library written in d or c
+lib = pybuffer.CDLL("./libyour-dub-lib.so")
+err = lib.pybuffer_func1(x, y, ctypes.c_double(2.0))
 assert err == 0
 ```
 
