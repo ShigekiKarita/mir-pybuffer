@@ -4,7 +4,7 @@
 [![dub](https://img.shields.io/dub/v/mir-pybuffer.svg)](https://code.dlang.org/packages/mir-pybuffer)
 
 
-mir-pybuffer provides simpler communication interface between C/D-language and python ndarrays (e.g., numpy, PIL) in official [Buffer Protocol](https://docs.python.org/3/c-api/buffer.html#buffer-protocol).
+mir-pybuffer provides simpler communication interface between C/D-language and python ndarrays (e.g., numpy, PIL) in [Buffer Protocol](https://docs.python.org/3/c-api/buffer.html#buffer-protocol).
 
 ## installation
 
@@ -14,7 +14,7 @@ $ dub fetch mir-pybuffer # for D (mir) extention
 ```
 
 for C extention, you do not need anything but `Python.h`.
-you can see simple read/write example [c-bp.c](c-bp.c) and run by `$ make test-c`.
+you can see a read/write example in [c-bp.c](c-bp.c) and run it by `$ make test-c`.
 
 ## usage
 
