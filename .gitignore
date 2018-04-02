@@ -16,6 +16,7 @@ mir-buffer-protocol-test-*
 *.pyc
 *.so
 dist/
+build/
 *.egg-info/
-__*
+__pycache__/
 dub.selections.json
