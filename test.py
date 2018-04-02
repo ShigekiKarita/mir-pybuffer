@@ -20,5 +20,7 @@ assert numpy.all(x == -1)
 if "mir" in args.libpath:
     assert lib.pybuffer_func1(pybuffer.to_bytes(x),
                               pybuffer.to_bytes(y),
-                              ctypes.c_double(1.0)) == 0
+                              ctypes.c_double(2.0)) == 0
+    assert numpy.all(x == numpy.array([[-1, 0, 1], [-1, -1, -1]]))
+    assert numpy.all(y == numpy.array([0, 2, 4]))
     assert lib.pybuffer_func2(pybuffer.to_bytes(x)) == 0

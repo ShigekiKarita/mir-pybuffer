@@ -6,8 +6,6 @@
 	"dependencies": {
 		"mir-algorithm": "~>0.9.5"
 	},
-    "dflags-dmd": ["-shared", "-fPIC", "-defaultlib=libphobos2.so"],
-    "lflags-dmd": ["-defaultlib=libphobos2.so"],
     "targetType": "dynamicLibrary",
 	"description": "mir-numpy connection example",
 	"copyright": "Copyright © 2018, karita",

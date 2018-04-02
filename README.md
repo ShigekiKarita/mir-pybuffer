@@ -31,7 +31,7 @@ x = numpy.array([[0, 1, 2], [3, 4, 5]]).astype(numpy.float64)
 y = numpy.array([0, 1, 2]).astype(numpy.float64)
 err = lib.pybuffer_func1(pybuffer.to_bytes(x),
                          pybuffer.to_bytes(y),
-                         ctypes.c_double(1.0))
+                         ctypes.c_double(2.0))
 assert err == 0
 ```
 
@@ -44,7 +44,8 @@ import pybuffer : pybuffer, MixinPyBufferWrappers;
 
 @pybuffer
 void func1(Slice!(Contiguous, [2LU], double*) mat, Slice!(Contiguous, [1LU], double*) vec, double a) {
-  ...
+  mat[0][] += vec;
+  vec[] *= a;
 }
 
 mixin MixinPyBufferWrappers;
