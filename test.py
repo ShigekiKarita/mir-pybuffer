@@ -17,8 +17,8 @@ lib.test_pybuffer(pybuffer.to_bytes(x))
 print(x)
 assert numpy.all(x == -1)
 
-# lib.hello()
-assert lib.pybuffer_func1(pybuffer.to_bytes(x),
-                          pybuffer.to_bytes(y),
-                          ctypes.c_double(1.0)) == 0
-assert lib.pybuffer_func2(pybuffer.to_bytes(x)) == 0
+if "mir" in args.libpath:
+    assert lib.pybuffer_func1(pybuffer.to_bytes(x),
+                              pybuffer.to_bytes(y),
+                              ctypes.c_double(1.0)) == 0
+    assert lib.pybuffer_func2(pybuffer.to_bytes(x)) == 0
