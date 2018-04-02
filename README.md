@@ -4,7 +4,7 @@
 [![dub](https://img.shields.io/dub/v/mir-pybuffer.svg)](https://code.dlang.org/packages/mir-pybuffer)
 
 
-mir-pybuffer provides simpler way to write communicate between C/D-language and python ndarrays (e.g., numpy, PIL) in official [Buffer Protocol](https://docs.python.org/3/c-api/buffer.html#buffer-protocol).
+mir-pybuffer provides simpler communication interface between C/D-language and python ndarrays (e.g., numpy, PIL) in official [Buffer Protocol](https://docs.python.org/3/c-api/buffer.html#buffer-protocol).
 
 ## installation
 
