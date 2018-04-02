@@ -11,5 +11,5 @@ test-c: libc-bp.so
 
 test-mir:
 	dub build --compiler=$(DC)
-	python test.py ./libmir-bp.so
+	python test.py ./libmir-pybuffer.so
 
