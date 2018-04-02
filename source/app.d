@@ -3,7 +3,7 @@ import std.stdio;
 import mir.ndslice;
 import mir.ndslice.connect.cpython;
 
-import connect : MixinPyBufferWrappers, pybuffer;
+import pybuffer : MixinPyBufferWrappers, pybuffer;
 
 extern (C):
 

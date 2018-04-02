@@ -5,7 +5,7 @@ setup(
     name='pybuffer',
     version='0.1',
     description='pybuffer utility for ctypes',
-    url='https://github.com/ShigekiKarita/mir-buffer-protocol',
+    url='https://github.com/ShigekiKarita/mir-pybuffer',
     author='Shigeki Karita',
     author_email="shigekikarita@gmail.com",
     license='BSL-1.0',

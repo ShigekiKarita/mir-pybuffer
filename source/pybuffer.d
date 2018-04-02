@@ -1,4 +1,4 @@
-module connect;
+module pybuffer;
 
 import std.stdio;
 import mir.ndslice;
