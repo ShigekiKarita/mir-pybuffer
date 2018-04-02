@@ -15,8 +15,6 @@ addons:
     - ubuntu-toolchain-r-test
     packages:
     - gcc-7
-  env:
-    - CC=gcc-7
 
 install:
   - sudo apt-get update
@@ -31,6 +29,6 @@ install:
   - source activate test-environment
 
 script:
-  - make test-c
+  - make test-c CC=gcc-7
   - make test-mir
 
