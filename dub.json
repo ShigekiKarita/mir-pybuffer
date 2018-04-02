@@ -1,0 +1,13 @@
+{
+	"name": "mir-bp",
+	"authors": [
+		"karita"
+	],
+	"dependencies": {
+		"mir-algorithm": "~>0.9.5"
+	},
+    "targetType": "dynamicLibrary",
+	"description": "mir-numpy connection example",
+	"copyright": "Copyright © 2018, karita",
+	"license": "proprietary"
+}

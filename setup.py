@@ -1,0 +1,17 @@
+from setuptools import setup
+
+
+setup(
+    name='pybuffer',
+    version='0.1',
+    description='pybuffer utility for ctypes',
+    url='https://github.com/ShigekiKarita/mir-buffer-protocol',
+    author='Shigeki Karita',
+    author_email="shigekikarita@gmail.com",
+    license='BSL-1.0',
+    keywords='ctypes',
+    packages=["pybuffer"],
+    classifiers=[
+        'Programming Language :: Python :: 3',
+    ],
+)
