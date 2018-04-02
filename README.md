@@ -1,4 +1,4 @@
-# mir-pybuffer
+# mir-pybuffer [![Build Status](https://travis-ci.org/ShigekiKarita/mir-pybuffer.svg?branch=master)](https://travis-ci.org/ShigekiKarita/mir-pybuffer)
 
 
 ## installation
