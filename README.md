@@ -35,12 +35,14 @@ see this [dub.json](dub.json) for creating dynamic library for python.
 
 ``` d
 import mir.ndslice : Slice, Contiguous;
-import pybuffer : pybuffer;
+import pybuffer : pybuffer, MixinPyBufferWrappers;
 
 @pybuffer
 void func1(Slice!(Contiguous, [2LU], double*) mat, Slice!(Contiguous, [1LU], double*) vec, double a) {
   ...
 }
+
+mixin MixinPyBufferWrappers;
 ```
 
 `@pybuffer` will generate a wrapped function as follows:

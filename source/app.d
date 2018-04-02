@@ -68,4 +68,4 @@ void func2(Slice!(Contiguous, [2LU], double*) mat) {
 }
 
 
-mixin MixinPyBufferWrappers!();
+mixin MixinPyBufferWrappers;
