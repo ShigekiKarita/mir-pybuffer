@@ -4,21 +4,23 @@
 [![dub](https://img.shields.io/dub/v/mir-pybuffer.svg)](https://code.dlang.org/packages/mir-pybuffer)
 
 
-mir-pybuffer aims to extend python ndarrays (e.g., numpy, PIL) in official [Buffer Protocol](https://docs.python.org/3/c-api/buffer.html#buffer-protocol) with thin wrapper functionality.
+mir-pybuffer provides simpler way to write communicate between C/D-language and python ndarrays (e.g., numpy, PIL) in official [Buffer Protocol](https://docs.python.org/3/c-api/buffer.html#buffer-protocol).
 
 ## installation
 
-```
+``` console
 $ pip install pybuffer
-# for D (mir) extention
-$ dub fetch mir-pybuffer
+$ dub fetch mir-pybuffer # for D (mir) extention
 ```
 
-for c extention using `#include <Python.h>`, you can see our `test-c` rule in [Makefile](Makefile).
+for C extention, you do not need anything except for `Python.h`.
+you can see simple read/write example ub `c-bp.c` and run by `$ make test-c`.
 
 ## usage
 
-python side. you should wrap numpy contiguous array with `pybuffer.to_bytes`.
+### python side
+
+you should wrap numpy contiguous array with `pybuffer.to_bytes`.
 also see [mir.ndslice.connect.cpython.PythonBufferErrorCode](http://docs.algorithm.dlang.io/latest/mir_ndslice_connect_cpython.html#.PythonBufferErrorCode) for error handling.
 
 ``` python
@@ -34,7 +36,9 @@ err = lib.pybuffer_func1(x, y, ctypes.c_double(2.0))
 assert err == 0
 ```
 
-d side. currently mir-pybuffer only supports ndslice functions that returns void.
+### D side
+
+currently mir-pybuffer only supports ndslice functions that returns void.
 see this [dub.json](dub.json) for creating dynamic library for python.
 
 ``` d
@@ -49,6 +53,10 @@ void func1(Slice!(Contiguous, [2LU], double*) mat, Slice!(Contiguous, [1LU], dou
 
 mixin MixinPyBufferWrappers;
 ```
+
+run by `$ make test-mir`.
+
+## detail
 
 `@pybuffer` will generate a wrapped function as follows:
 
