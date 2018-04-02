@@ -21,7 +21,7 @@ import ctypes
 import numpy
 import pybuffer
 
-lib = ctypes.CDLL("./libmir-bp.so") # dynamic library written in d
+lib = ctypes.CDLL("./libyour-dub-lib.so") # dynamic library written in d
 x = numpy.array([[0, 1, 2], [3, 4, 5]]).astype(numpy.float64)
 y = numpy.array([0, 1, 2]).astype(numpy.float64)
 err = lib.pybuffer_func1(pybuffer.to_bytes(x),
