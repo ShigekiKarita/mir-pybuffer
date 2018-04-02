@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='pybuffer',
-    version='0.1.3',
+    version='0.1.4',
     description='pybuffer utility for ctypes',
     url='https://github.com/ShigekiKarita/mir-pybuffer',
     author='Shigeki Karita',
