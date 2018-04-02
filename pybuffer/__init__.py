@@ -84,8 +84,8 @@ class PyBuffer(ctypes.Structure):
         ctypes.memset(ctypes.byref(self), 0, ctypes.sizeof(self))
 
 
-def to_bytes(obj, flags=PyBUF_FULL):
-    return memoryview(PyBuffer(obj, flags)).tobytes()
+def to_buffer(obj, flags=PyBUF_FULL):
+    return ctypes.byref(PyBuffer(obj, flags))
 
 
 def check_buffer(obj):
@@ -97,14 +97,20 @@ def check_buffer(obj):
 
 
 class CDLL(ctypes.CDLL):
+    # https://github.com/python/cpython/blob/306559e6ca15b86eb230609f484f48132b7ca383/Lib/ctypes/__init__.py#L311
     def __getattr__(self, name):
-        func = super().__getattr__(name)
+        newname = "pybuffer_" + name
+        try:
+            func = super().__getattr__(newname)
+        except AttributeError:
+            func = super().__getattr__(name)
+
         def wrapped(*args):
             newargs = []
             for a in args:
                 # see https://docs.python.org/3/c-api/buffer.html#c.PyObject_CheckBuffer
                 if check_buffer(a) == 1:
-                    newargs.append(to_bytes(a))
+                    newargs.append(to_buffer(a))
                 else:
                     newargs.append(a)
             return func(*newargs)

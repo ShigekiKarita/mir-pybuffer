@@ -28,11 +28,13 @@ import ctypes
 import numpy
 import pybuffer
 
+# ndarrays
 x = numpy.array([[0, 1, 2], [3, 4, 5]]).astype(numpy.float64)
 y = numpy.array([0, 1, 2]).astype(numpy.float64)
+
 # load dynamic library written in d or c
 lib = pybuffer.CDLL("./libyour-dub-lib.so")
-err = lib.pybuffer_func1(x, y, ctypes.c_double(2.0))
+err = lib.func1(x, y, ctypes.c_double(2.0))
 assert err == 0
 ```
 
@@ -79,3 +81,5 @@ extern(C) auto pybuffer_func1( ref Py_buffer a0 , ref Py_buffer a1 , double a2 )
   return PythonBufferErrorCode.success;
 }
 ```
+
+`pybuffer.CDLL` calls `pybuffer_func1` instead of `func1` with implicit ndarray->PyBuffer conversions of arguments.
