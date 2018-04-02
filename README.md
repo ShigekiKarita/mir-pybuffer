@@ -3,13 +3,18 @@
 [![pypi](https://img.shields.io/pypi/v/pybuffer.svg)](https://pypi.org/project/pybuffer)
 [![dub](https://img.shields.io/dub/v/mir-pybuffer.svg)](https://code.dlang.org/packages/mir-pybuffer)
 
+
+mir-pybuffer aims to extend python ndarrays (e.g., numpy, PIL) in official [Buffer Protocol](https://docs.python.org/3/c-api/buffer.html#buffer-protocol) with thin wrapper functionality.
+
 ## installation
 
 ```
 $ pip install pybuffer
+# for D (mir) extention
 $ dub fetch mir-pybuffer
 ```
 
+for c extention using `#include <Python.h>`, you can see our `test-c` rule in [Makefile](Makefile).
 
 ## usage
 

@@ -59,12 +59,17 @@ void test_pybuffer(ref Py_buffer pybuf) {
 
 @pybuffer
 void func1(Slice!(Contiguous, [2LU], double*) mat, Slice!(Contiguous, [1LU], double*) vec, double a) {
-    
+    writeln(mat);
+    writeln(vec);
+    string s1 = "hoge";
+    string s2 = "fuga";
+    s1 ~= s2;
+    writefln!"%f"(mat[0, 0]);
 }
 
 @pybuffer
 void func2(Slice!(Contiguous, [2LU], double*) mat) {
-    
+    writeln(mat);
 }
 
 
