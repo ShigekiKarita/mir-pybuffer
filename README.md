@@ -1,5 +1,7 @@
-# mir-pybuffer [![Build Status](https://travis-ci.org/ShigekiKarita/mir-pybuffer.svg?branch=master)](https://travis-ci.org/ShigekiKarita/mir-pybuffer)
-
+# mir-pybuffer
+[![Build Status](https://travis-ci.org/ShigekiKarita/mir-pybuffer.svg?branch=master)](https://travis-ci.org/ShigekiKarita/mir-pybuffer)
+[![pypi](https://img.shields.io/pypi/v/pybuffer.svg)](https://pypi.org/project/pybuffer)
+[![dub](https://img.shields.io/dub/v/mir-pybuffer.svg)](https://code.dlang.org/packages/mir-pybuffer)
 
 ## installation
 
