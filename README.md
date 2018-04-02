@@ -47,7 +47,7 @@ void func1(Slice!(Contiguous, [2LU], double*) mat, Slice!(Contiguous, [1LU], dou
 
 ``` d
 pragma(mangle, __traits(identifier, pybuffer_func1))
-extern(C) auto pybuffer_func1( ref Py_buffera0 , ref Py_buffera1 , double a2 ) {
+extern(C) auto pybuffer_func1( ref Py_buffer a0 , ref Py_buffer a1 , double a2 ) {
   import mir.ndslice.connect.cpython;
   import std.stdio : writeln;
   Slice!(Contiguous, [2LU], double*) _a0;
