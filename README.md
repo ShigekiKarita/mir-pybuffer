@@ -20,8 +20,7 @@ you can see a read/write example in [c-bp.c](c-bp.c) and run it by `$ make test-
 
 ### python side
 
-you should wrap numpy contiguous array with `pybuffer.to_bytes`.
-also see [mir.ndslice.connect.cpython.PythonBufferErrorCode](http://docs.algorithm.dlang.io/latest/mir_ndslice_connect_cpython.html#.PythonBufferErrorCode) for error handling.
+All you need to do is calling C/D dynamic library with `pybuffer.CDLL`.
 
 ``` python
 import ctypes
@@ -40,7 +39,7 @@ assert err == 0
 
 ### D side
 
-currently mir-pybuffer only supports ndslice functions that returns void.
+currently mir-pybuffer only supports ndslice functions that return void.
 see this [dub.json](dub.json) for creating dynamic library for python.
 
 ``` d
@@ -62,7 +61,7 @@ run by `$ make test-mir`.
 
 ## detail
 
-`@pybuffer` will generate a wrapped function as follows:
+`@pybuffer` and `mixin MixinPyBufferWrappers;` will generate wrapper functions as follows:
 
 ``` d
 pragma(mangle, __traits(identifier, pybuffer_func1))
@@ -85,11 +84,10 @@ extern(C) auto pybuffer_func1( ref Py_buffer a0 , ref Py_buffer a1 , double a2 )
 ```
 
 you can see the actual generated codes by `lib.print_generated()` in python.
-
-`pybuffer.CDLL` calls `pybuffer_func1` instead of `func1` with implicit ndarray->PyBuffer conversions of arguments.
+`pybuffer.CDLL` calls `pybuffer_func1` instead of `func1` with PyBuffer arguments and error code handling.
+see [mir.ndslice.connect.cpython.PythonBufferErrorCode](http://docs.algorithm.dlang.io/latest/mir_ndslice_connect_cpython.html#.PythonBufferErrorCode) for error code definitions.
 
 
 ## known issues
 
 - `import pybuffer` without ` : pybuffer, MixinPyBufferWrappers` causes a empty generated string.
-
