@@ -40,7 +40,7 @@ assert err == 0
 ### D side
 
 currently mir-pybuffer only supports ndslice functions that return void.
-see this [dub.json](dub.json) for creating dynamic library for python.
+To create dynamic library, you also need to add `"targetType": "dynamicLibrary"` in [dub.json](test/dub.json).
 
 ``` d
 import mir.ndslice : Slice, Contiguous;
@@ -57,7 +57,7 @@ void func1(Slice!(Contiguous, [2LU], double*) mat, Slice!(Contiguous, [1LU], dou
 mixin MixinPyBufferWrappers;
 ```
 
-run by `$ make test-mir`.
+run this example by `$ make test-mir`.
 
 ## detail
 
