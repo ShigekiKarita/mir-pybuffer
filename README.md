@@ -39,7 +39,7 @@ assert err == 0
 
 ### D side
 
-currently mir-pybuffer only supports ndslice functions that returns void.
+currently mir-pybuffer only supports ndslice functions that return void.
 see this [dub.json](dub.json) for creating dynamic library for python.
 
 ``` d
@@ -59,7 +59,7 @@ run by `$ make test-mir`.
 
 ## detail
 
-`@pybuffer` will generate a wrapped function as follows:
+`@pybuffer` and `mixin MixinPyBufferWrappers;` will generate wrapper functions as follows:
 
 ``` d
 pragma(mangle, __traits(identifier, pybuffer_func1))
@@ -82,5 +82,5 @@ extern(C) auto pybuffer_func1( ref Py_buffer a0 , ref Py_buffer a1 , double a2 )
 ```
 
 `pybuffer.CDLL` calls `pybuffer_func1` instead of `func1` with PyBuffer arguments and error code handling.
-also see [mir.ndslice.connect.cpython.PythonBufferErrorCode](http://docs.algorithm.dlang.io/latest/mir_ndslice_connect_cpython.html#.PythonBufferErrorCode) for error handling.
+see [mir.ndslice.connect.cpython.PythonBufferErrorCode](http://docs.algorithm.dlang.io/latest/mir_ndslice_connect_cpython.html#.PythonBufferErrorCode) for error code definitions.
 
