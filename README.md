@@ -20,8 +20,7 @@ you can see a read/write example in [c-bp.c](c-bp.c) and run it by `$ make test-
 
 ### python side
 
-you should wrap numpy contiguous array with `pybuffer.to_bytes`.
-also see [mir.ndslice.connect.cpython.PythonBufferErrorCode](http://docs.algorithm.dlang.io/latest/mir_ndslice_connect_cpython.html#.PythonBufferErrorCode) for error handling.
+All you need to do is calling C/D dynamic library with `pybuffer.CDLL`.
 
 ``` python
 import ctypes
@@ -82,4 +81,6 @@ extern(C) auto pybuffer_func1( ref Py_buffer a0 , ref Py_buffer a1 , double a2 )
 }
 ```
 
-`pybuffer.CDLL` calls `pybuffer_func1` instead of `func1` with implicit ndarray->PyBuffer conversions of arguments.
+`pybuffer.CDLL` calls `pybuffer_func1` instead of `func1` with PyBuffer arguments and error code handling.
+also see [mir.ndslice.connect.cpython.PythonBufferErrorCode](http://docs.algorithm.dlang.io/latest/mir_ndslice_connect_cpython.html#.PythonBufferErrorCode) for error handling.
+
