@@ -18,6 +18,10 @@ print(x)
 assert numpy.all(x == -1)
 
 if "mir" in args.libpath:
+    print("==== begin generated ====")
+    lib.print_generated()
+    print("===== end generated =====")
+
     assert lib.func1(x, y, ctypes.c_double(2.0)) == 0
     assert numpy.all(x == numpy.array([[-1, 0, 1], [-1, -1, -1]]))
     assert numpy.all(y == numpy.array([0, 2, 4]))

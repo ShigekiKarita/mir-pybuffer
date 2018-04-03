@@ -1,0 +1,13 @@
+{
+	"name": "mir-bp-test",
+	"authors": [
+		"skarita"
+	],
+	"dependencies": {
+		"mir-pybuffer": { "path": ".." }
+	},
+    "targetType": "dynamicLibrary",
+	"description": "A minimal D application.",
+	"copyright": "Copyright © 2018, skarita",
+	"license": "proprietary"
+}

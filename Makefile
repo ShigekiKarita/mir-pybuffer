@@ -1,4 +1,4 @@
-.PHONY: test-c test-mir
+.PHONY: test test-c test-mir
 
 %.o: %.c
 	$(CC) -c -fPIC $< -o $@ -I$(CONDA_PREFIX)/include/python3.6m
@@ -10,6 +10,5 @@ test-c: libc-bp.so
 	python test.py ./$<
 
 test-mir:
-	dub build --compiler=$(DC)
-	python test.py ./libmir-pybuffer.so
-
+	cd test && dub build --force --compiler=$(DC)
+	python test.py ./test/libmir-bp-test.so

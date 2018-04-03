@@ -45,6 +45,8 @@ see this [dub.json](dub.json) for creating dynamic library for python.
 
 ``` d
 import mir.ndslice : Slice, Contiguous;
+// NOTE: DO NOT import pybuffer without ": pybuffer, MixinPyBufferWrappers"
+// because it fails to generate wrappers.
 import pybuffer : pybuffer, MixinPyBufferWrappers;
 
 @pybuffer
@@ -82,4 +84,12 @@ extern(C) auto pybuffer_func1( ref Py_buffer a0 , ref Py_buffer a1 , double a2 )
 }
 ```
 
+you can see the actual generated codes by `lib.print_generated()` in python.
+
 `pybuffer.CDLL` calls `pybuffer_func1` instead of `func1` with implicit ndarray->PyBuffer conversions of arguments.
+
+
+## known issues
+
+- `import pybuffer` without ` : pybuffer, MixinPyBufferWrappers` causes a empty generated string.
+
