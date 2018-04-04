@@ -8,5 +8,5 @@
 	},
 	"description": "mir-numpy connection example",
 	"copyright": "Copyright © 2018, karita",
-	"license": "proprietary"
+	"license": "BSL-1.0"
 }
