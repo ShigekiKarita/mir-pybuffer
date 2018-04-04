@@ -97,6 +97,16 @@ def check_buffer(obj):
 
 
 class CDLL(ctypes.CDLL):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # initialize D runtime
+        if hasattr(self, "rt_init"):
+            assert self.rt_init()
+
+    def __del__(self):
+        if hasattr(self, "rt_term"):
+            self.rt_term()
+
     # https://github.com/python/cpython/blob/306559e6ca15b86eb230609f484f48132b7ca383/Lib/ctypes/__init__.py#L311
     def __getattr__(self, name):
         newname = "pybuffer_" + name

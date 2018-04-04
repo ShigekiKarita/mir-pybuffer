@@ -65,6 +65,10 @@ static void func1(Slice!(Contiguous, [2LU], double*) mat, Slice!(Contiguous, [1L
 
 @pybuffer
 static void func2(Slice!(Contiguous, [2LU], double*) mat) {
+    string s;
+    s ~= "hello!";
+    writeln(s);
+
     writeln(mat);
 }
 
