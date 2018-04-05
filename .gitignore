@@ -12,6 +12,7 @@ mir-buffer-protocol-test-*
 *.o
 *.obj
 *.lst
+*.a
 
 *.pyc
 *.so
