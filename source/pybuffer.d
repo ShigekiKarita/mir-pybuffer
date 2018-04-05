@@ -15,7 +15,6 @@ mixin template MixinPyBufferWrappers(string _Impl = __MODULE__) {
         foreach (mem; __traits(allMembers, Impl)) {
             foreach (attr; __traits(getAttributes, __traits(getMember, Impl, mem))) {
                 if (is(attr == pybuffer)) {
-                    pragma(msg, mem);
                     mixin("alias R = ReturnType!(" ~ _Impl ~ "." ~ mem ~ ");");
                     static assert(is(R == void), "@pybuffer function should return void");
                     string args;
@@ -25,7 +24,6 @@ mixin template MixinPyBufferWrappers(string _Impl = __MODULE__) {
 
                     mixin("alias Ps = Parameters!(" ~ _Impl ~ "." ~ mem ~ ");");
                     foreach (i, P; Ps) {
-                        pragma(msg, P.stringof);
                         enum a = "a" ~ i.to!string;
                         if (isSlice!P) {
                             args ~= " " ~ "ref Py_buffer " ~ a ~ " ,";
