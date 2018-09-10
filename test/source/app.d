@@ -48,7 +48,7 @@ void test_pybuffer(ref Py_buffer pybuf) {
     }
     printf("]\n");
 
-    Slice!(Contiguous, [2LU], double*) mat = void;
+    Slice!(double*, 2) mat = void;
     auto err = fromPythonBuffer(mat, pybuf);
     writeln(err);
     assert(err == PythonBufferErrorCode.success);
@@ -58,13 +58,13 @@ void test_pybuffer(ref Py_buffer pybuf) {
 }
 
 @pybuffer
-static void func1(Slice!(Contiguous, [2LU], double*) mat, Slice!(Contiguous, [1LU], double*) vec, double a) {
+static void func1(Slice!(double*, 2) mat, Slice!(double*, 1) vec, double a) {
     mat[0][] += vec;
     vec[] *= 2;
 }
 
 @pybuffer
-static void func2(Slice!(Contiguous, [2LU], double*) mat) {
+static void func2(Slice!(double*, 2) mat) {
     string s;
     s ~= "hello!";
     writeln(s);

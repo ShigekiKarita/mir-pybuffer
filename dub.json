@@ -4,7 +4,7 @@
 		"karita"
 	],
 	"dependencies": {
-		"mir-algorithm": "~>0.9.5"
+		"mir-algorithm": "~>2.0.1"
 	},
 	"description": "mir-numpy connection example",
 	"copyright": "Copyright © 2018, karita",
