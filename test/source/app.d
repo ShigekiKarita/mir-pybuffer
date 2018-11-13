@@ -7,6 +7,7 @@ import pybuffer : MixinPyBufferWrappers, pybuffer;
 
 extern (C):
 
+
 // @nogc:
 void test_pybuffer(ref Py_buffer pybuf) {
     writeln(pybuf);
@@ -39,10 +40,10 @@ void test_pybuffer(ref Py_buffer pybuf) {
     for (int i = 0; i < pybuf.shape[0]; ++i) {
         printf(" [ ");
         for (int j = 0; j < pybuf.shape[1]; ++j) {
-            int idx = (i * pybuf.strides[0] + j * pybuf.strides[1]) / pybuf.itemsize;
-                printf("%lf ", d[idx]);
-                assert(d[idx] == acc);
-                ++acc;
+            auto idx = (i * pybuf.strides[0] + j * pybuf.strides[1]) / pybuf.itemsize;
+            printf("%lf ", d[idx]);
+            assert(d[idx] == acc);
+            ++acc;
         }
         printf("]\n");
     }
@@ -58,9 +59,14 @@ void test_pybuffer(ref Py_buffer pybuf) {
 }
 
 @pybuffer
-static void func1(Slice!(double*, 2) mat, Slice!(double*, 1) vec, double a) {
+static void func1(Slice!(double*, 2) mat, Slice!(double*, 1) vec, double a, float f, bool b, long l, string s) {
     mat[0][] += vec;
     vec[] *= 2;
+    assert(a == 2.0);
+    assert(f == 3.0);
+    assert(b);
+    assert(l == 5);
+    assert(s == "six");
 }
 
 @pybuffer

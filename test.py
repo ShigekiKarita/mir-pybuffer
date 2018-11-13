@@ -22,7 +22,8 @@ if "mir" in args.libpath:
     lib.print_generated()
     print("===== end generated =====")
 
-    assert lib.func1(x, y, ctypes.c_double(2.0)) == 0
+    # assert lib.func1(x, y, ctypes.c_double(2.0)) == 0
+    assert lib.func1(x, y, 2.0, 3.0, True, 5, "six") == 0
     assert numpy.all(x == numpy.array([[-1, 0, 1], [-1, -1, -1]]))
     assert numpy.all(y == numpy.array([0, 2, 4]))
     assert lib.pybuffer_func2(x) == 0

@@ -121,6 +121,8 @@ class CDLL(ctypes.CDLL):
                 # see https://docs.python.org/3/c-api/buffer.html#c.PyObject_CheckBuffer
                 if check_buffer(a) == 1:
                     newargs.append(to_buffer(a))
+                elif isinstance(a, (float, int, bool, str)):
+                    newargs.append(ctypes.py_object(a))
                 else:
                     newargs.append(a)
             return func(*newargs)

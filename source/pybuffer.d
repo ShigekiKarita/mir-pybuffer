@@ -1,13 +1,31 @@
 module pybuffer;
+/** CODING GUIDE
 
-import std.stdio;
-import mir.ndslice;
+D or Python:
 
+When we can implement something both in D or Python, we do everything in D.
+D has less overhead than Python (the reason why we use D from Python).
+
+Error Handling:
+
+D function should raise exception for python by PyErr_SetString(PyObject* type, const char* message)
+The type can be PyExc_RuntimeError, PyExc_TypeError, etc
+see also https://docs.python.org/3/c-api/exceptions.html#standard-exceptions
+
+ */
+
+private import std.stdio;
+private import mir.ndslice;
 
 struct pybuffer {}
 
 mixin template MixinPyBufferWrappers(string _Impl = __MODULE__) {
+    import pyobject;
+    import std.string : toStringz, fromStringz;
+    import std.traits : isFloatingPoint, isBoolean, isIntegral;
+    import std.conv : to;
     private enum string _generated = {
+        // mixin(cpythonHeader);
         mixin("import Impl = " ~ _Impl ~ ";");
         import std.conv : to;
         import std.traits : Parameters, ReturnType;
@@ -27,16 +45,64 @@ mixin template MixinPyBufferWrappers(string _Impl = __MODULE__) {
                         enum a = "a" ~ i.to!string;
                         if (isSlice!P) {
                             args ~= " " ~ "ref Py_buffer " ~ a ~ " ,";
+                            // args ~= " PyObject* " ~ a ~ " ,";
                             enum _a = "_a" ~ i.to!string;
                             converts ~= "  " ~ P.stringof ~ " " ~ _a ~ ";\n";
-                            converts ~= "  {\n    auto err = fromPythonBuffer( " ~ _a ~ " , " ~ a ~ " );\n";
-                            // TODO: enrich error messages
-                            converts ~= "    if (err != PythonBufferErrorCode.success) { writeln(err, \" at param " ~ i.to!string ~ " \", a" ~ i.to!string ~ "); return err; }\n  }\n";
+                            // converts ~= "  {\n Py_buffer* buf; PyObject_GetBuffer(" ~ a ~ ", buf, PyBUF_FULL); auto err = fromPythonBuffer( " ~ _a ~ " , buf );\n";
+                            converts ~= "  {\n auto err = fromPythonBuffer( " ~ _a ~ " , " ~ a ~ " );\n";
+                            converts ~= "    if (err != PythonBufferErrorCode.success) { PyErr_SetString(PyExc_RuntimeError, \"invalid array object at param " ~ i.to!string ~ " \".toStringz); }\n  }\n";
                             rargs ~= " " ~ _a ~ " ,";
-                        } else {
-                            args ~= " " ~ P.stringof ~ " " ~ a ~ " ,";
-                            rargs ~= " " ~ a ~ " ,";
                         }
+                        else if (is(P == string)) {
+                            args ~= " PyObject* " ~ a ~ " ,";
+                            // TODO error handling
+                            enum _a = "_a" ~ i.to!string;
+                            converts ~= "  const(char*) " ~ _a ~ " = PyUnicode_AsUTF8(" ~ a ~ ");\n";
+                            rargs ~= " " ~ _a ~ ".fromStringz.to!string ,";
+                        }
+                        else if (isFloatingPoint!P) {
+                            args ~= " PyObject* " ~ a ~ " ,";
+                            enum _a = "_a" ~ i.to!string;
+                            converts ~= "  double " ~ _a ~ " = PyFloat_AsDouble(" ~ a ~ ");\n";
+                            rargs ~= " " ~ _a ~ " ,";
+                        }
+                        else if (is(P == ptrdiff_t)) {
+                            args ~= " PyObject* " ~ a ~ " ,";
+                            enum _a = "_a" ~ i.to!string;
+                            converts ~= "  auto " ~ _a ~ " = PyLong_AsSsize_t(" ~ a ~ ");\n";
+                            rargs ~= " " ~ _a ~ " ,";
+                        }
+                        else if (is(P == size_t)) {
+                            args ~= " PyObject* " ~ a ~ " ,";
+                            enum _a = "_a" ~ i.to!string;
+                            converts ~= "  auto " ~ _a ~ " = PyLong_AsSize_t(" ~ a ~ ");\n";
+                            rargs ~= " " ~ _a ~ " ,";
+                        }
+                        else if (is(P == ulong)) {
+                            args ~= " PyObject* " ~ a ~ " ,";
+                            enum _a = "_a" ~ i.to!string;
+                            converts ~= "  auto " ~ _a ~ " = PyLong_AsUnsignedLongLong(" ~ a ~ ");\n";
+                            rargs ~= " " ~ _a ~ " ,";
+                        }
+                        else if (isIntegral!P) {
+                            args ~= " PyObject* " ~ a ~ " ,";
+                            enum _a = "_a" ~ i.to!string;
+                            converts ~= "  long " ~ _a ~ " = PyLong_AsLongLong(" ~ a ~ ");\n";
+                            // converts ~= "  long " ~ _a ~ ";\n";
+                            rargs ~= " " ~ _a ~ " ,";
+                        }
+                        else if (isBoolean!P) {
+                            args ~= " PyObject* " ~ a ~ " ,";
+                            enum _a = "_a" ~ i.to!string;
+                            // https://docs.python.org/3/c-api/object.html#c.PyObject_IsTrue
+                            // Returns 1 if the object o is considered to be true, and 0 otherwise
+                            converts ~= "  bool " ~ _a ~ " = PyObject_IsTrue(" ~ a ~ ") == 1;\n";
+                            rargs ~= " " ~ _a ~ " ,";
+                        }
+                        else {
+                            assert(false, "unknown type to wrap: " ~ P.stringof ~ " at param " ~ i.to!string);
+                        }
+                        converts ~= "  { PyObject* e; if ((e = PyErr_Occurred()) != null) { PyErr_SetString(e, \"invalid float object at param " ~ i.to!string ~ " \".toStringz); } }\n";
                     }
 
                     // decleration

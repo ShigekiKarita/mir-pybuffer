@@ -1,7 +1,7 @@
 .PHONY: test test-c test-mir
 
 %.o: %.c
-	$(CC) -c -fPIC $< -o $@ -I$(CONDA_PREFIX)/include/python3.6m
+	$(CC) -c -fPIC $< -o $@ -I$(shell echo $(CONDA_PREFIX)/include/python3.*) -std=c99
 
 lib%.so: %.o
 	$(CC) -shared -Wl,-soname,$@ -o $@ $<
