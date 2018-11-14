@@ -16,6 +16,12 @@ addons:
     packages:
     - gcc-7
 
+env:
+  matrix:
+    - PY_VER=3.5
+    - PY_VER=3.6
+    - PY_VER=3.7
+
 install:
   - sudo apt-get update
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
@@ -25,10 +31,9 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - conda create -q -n test-environment python=3.6 numpy
+  - conda create -q -n test-environment python="${PY_VER}" numpy
   - source activate test-environment
 
 script:
   - make test-c CC=gcc-7
   - make test-mir
-
