@@ -1,8 +1,11 @@
+# [WARNING]
+**this repository is outdated. moved to [mir-pybind](https://github.com/ShigekiKarita/mir-pybind)**
+
+
 # mir-pybuffer
 [![Build Status](https://travis-ci.org/ShigekiKarita/mir-pybuffer.svg?branch=master)](https://travis-ci.org/ShigekiKarita/mir-pybuffer)
 [![pypi](https://img.shields.io/pypi/v/pybuffer.svg)](https://pypi.org/project/pybuffer)
 [![dub](https://img.shields.io/dub/v/mir-pybuffer.svg)](https://code.dlang.org/packages/mir-pybuffer)
-
 
 mir-pybuffer provides simpler communication interface between C/D-language and python ndarrays (e.g., numpy, PIL) in [Buffer Protocol](https://docs.python.org/3/c-api/buffer.html#buffer-protocol).
 
