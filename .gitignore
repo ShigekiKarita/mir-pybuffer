@@ -8,6 +8,8 @@ mir-buffer-protocol.dll
 mir-buffer-protocol.a
 mir-buffer-protocol.lib
 mir-buffer-protocol-test-*
+
+*-library
 *.exe
 *.o
 *.obj
