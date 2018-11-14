@@ -60,6 +60,7 @@ void test_pybuffer(ref Py_buffer pybuf) {
 
 @pybuffer
 static void func1(Slice!(double*, 2) mat, Slice!(double*, 1) vec, double a, float f, bool b, long l, string s) {
+    writeln("func1");
     mat[0][] += vec;
     vec[] *= 2;
     assert(a == 2.0);

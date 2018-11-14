@@ -27,6 +27,7 @@ mixin template MixinPyBufferWrappers(string _Impl = __MODULE__) {
     private enum string _generated = {
         // mixin(cpythonHeader);
         mixin("import Impl = " ~ _Impl ~ ";");
+        import std.stdio;
         import std.conv : to;
         import std.traits : Parameters, ReturnType;
         string ret;
@@ -47,10 +48,15 @@ mixin template MixinPyBufferWrappers(string _Impl = __MODULE__) {
                             args ~= " " ~ "ref Py_buffer " ~ a ~ " ,";
                             // args ~= " PyObject* " ~ a ~ " ,";
                             enum _a = "_a" ~ i.to!string;
+                            enum _b = "_b" ~ i.to!string;
                             converts ~= "  " ~ P.stringof ~ " " ~ _a ~ ";\n";
-                            // converts ~= "  {\n Py_buffer* buf; PyObject_GetBuffer(" ~ a ~ ", buf, PyBUF_FULL); auto err = fromPythonBuffer( " ~ _a ~ " , buf );\n";
-                            converts ~= "  {\n auto err = fromPythonBuffer( " ~ _a ~ " , " ~ a ~ " );\n";
-                            converts ~= "    if (err != PythonBufferErrorCode.success) { PyErr_SetString(PyExc_RuntimeError, \"invalid array object at param " ~ i.to!string ~ " \".toStringz); }\n  }\n";
+                            // converts ~= "  Py_buffer " ~ _b ~ ";writeln(\"converted\");\n";
+                            // converts ~= "  PyObject_GetBuffer(" ~ a ~ ", &" ~ _b ~ ", PyBuf_indirect | PyBuf_format | PyBuf_writable);writeln(\"converted\");\n";
+                            converts ~= "  {\n";
+                            converts ~= "    auto err = fromPythonBuffer( " ~ _a ~ " , " ~ a ~ " );\n";
+                            // converts ~= "    auto err = fromPythonBuffer( " ~ _a ~ " , " ~ _b ~ " );\n";
+                            converts ~= "    if (err != PythonBufferErrorCode.success) { PyErr_SetString(PyExc_RuntimeError, \"invalid array object at param " ~ i.to!string ~ " \".toStringz); }\n";
+                            converts ~= "  }\n";
                             rargs ~= " " ~ _a ~ " ,";
                         }
                         else if (is(P == string)) {

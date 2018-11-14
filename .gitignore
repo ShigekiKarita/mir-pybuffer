@@ -21,3 +21,12 @@ build/
 *.egg-info/
 __pycache__/
 dub.selections.json
+
+*
+*/
+!*.d
+!*.py
+!*.md
+!dub.json
+!.gitignore
+

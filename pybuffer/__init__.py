@@ -121,10 +121,11 @@ class CDLL(ctypes.CDLL):
                 # see https://docs.python.org/3/c-api/buffer.html#c.PyObject_CheckBuffer
                 if check_buffer(a) == 1:
                     newargs.append(to_buffer(a))
+                    # newargs.append(ctypes.py_object(a))
                 elif isinstance(a, (float, int, bool, str)):
                     newargs.append(ctypes.py_object(a))
                 else:
-                    newargs.append(a)
+                    raise TypeError("unsupported type: %s of %s".format(type(a), a))
             return func(*newargs)
         setattr(self, name, wrapped)
         return wrapped
