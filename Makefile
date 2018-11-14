@@ -9,6 +9,7 @@ lib%.so: %.o
 test:
 	cd test && dub build --force --compiler=$(DC)
 	python test.py ./test/libmir-bp-test.so
+	cd test-module && dub build --force --compiler=$(DC) && python test.py
 
 test-c: libc-bp.so
 	python test.py ./$<

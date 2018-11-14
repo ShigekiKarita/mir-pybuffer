@@ -23,10 +23,11 @@ __pycache__/
 dub.selections.json
 
 *
-*/
+!*/
 !*.d
 !*.py
 !*.md
 !dub.json
 !.gitignore
 
+.dub
