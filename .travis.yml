@@ -9,13 +9,6 @@ d:
   - ldc
   - dmd
 
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - gcc-7
-
 env:
   matrix:
     - PY_VER=3.5
@@ -23,7 +16,6 @@ env:
     - PY_VER=3.7
 
 install:
-  - sudo apt-get update
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
@@ -35,5 +27,4 @@ install:
   - source activate test-environment
 
 script:
-  - make test-c CC=gcc-7
-  - make test-mir
+  - make test
