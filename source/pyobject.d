@@ -122,21 +122,113 @@ version (unittest) {} else {
         PyObject* PyLong_FromSsize_t(ptrdiff_t);
         PyObject* PyBool_FromLong(long v);
         PyObject* PyUnicode_FromStringAndSize(const(char*) u, Py_ssize_t len);
+        PyObject* PyTuple_New(Py_ssize_t);
+        int PyTuple_SetItem(PyObject *p, Py_ssize_t pos, PyObject *o);
 
         /**
            Error handling
         */
+        void PyErr_Print();
         PyObject* PyErr_Occurred();
         void PyErr_SetString(PyObject* type, const char* message);
         // NOTE: c globals need __gshared https://dlang.org/spec/interfaceToC.html#c-globals
         extern __gshared PyObject* PyExc_TypeError;
         extern __gshared PyObject* PyExc_RuntimeError;
+        extern __gshared PyObject* PyExc_ImportError;
+        extern __gshared PyObject* PyExc_AttributeError;
+        extern __gshared PyObject* PyExc_ValueError;
 
+        /**
+           Buffer Protocol
+         */
         import mir.ndslice.connect.cpython : Py_buffer;
         int PyObject_GetBuffer(PyObject *exporter, Py_buffer *view, int flags);
+        int PyObject_CheckReadBuffer(PyObject *obj);
+        void PyBuffer_Release(Py_buffer *view);
+        PyObject* PyMemoryView_FromBuffer(Py_buffer *view);
+        /**
+           numpy API
+        */
+        static __gshared void** PyArray_API;
+        PyObject* PyImport_ImportModule(const(char*));
+        PyObject* PyObject_GetAttrString(PyObject*, const(char*));
+        void* PyCapsule_GetPointer(PyObject *capsule, const(char*) name);
 
+        // from __multiarray_api.h
+        static int _import_array()
+        {
+            int st;
+            PyObject *numpy = PyImport_ImportModule("numpy.core.multiarray");
+            PyObject *c_api;
+
+            if (numpy == null) {
+                PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import");
+                return -1;
+            }
+            c_api = PyObject_GetAttrString(numpy, "_ARRAY_API");
+            Py_DecRef(numpy);
+            if (c_api == null) {
+                 PyErr_SetString(PyExc_AttributeError, "_ARRAY_API not found");
+                 return -1;
+            }
+            // if (!PyCapsule_CheckExact(c_api)) {
+            //     PyErr_SetString(PyExc_RuntimeError, "_ARRAY_API is not PyCapsule object");
+            //     Py_DecRef(c_api);
+            //     return -1;
+            // }
+            PyArray_API = cast(void**) PyCapsule_GetPointer(c_api, null);
+            Py_DecRef(c_api);
+            if (PyArray_API == null) {
+                PyErr_SetString(PyExc_RuntimeError, "_ARRAY_API is NULL pointer");
+                return -1;
+            }
+            return 0;
+        }
+
+        //// This function must be called in the initialization section of a module that will make use of the C-API
+        void import_array() {
+            if (_import_array() < 0) {
+                PyErr_Print();
+                PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import");
+                // return NUMPY_IMPORT_ARRAY_RETVAL;
+            }
+        }
+        alias npy_intp = ptrdiff_t;
+        PyObject* PyArray_SimpleNew(int nd, npy_intp* dims, int typenum);
+
+        /// https://github.com/numpy/numpy/blob/v1.15.4/numpy/core/include/numpy/ndarraytypes.h#L65-L89
+        enum NpyType : int {
+            npy_bool=0,
+            npy_byte, npy_ubyte,
+            npy_short, npy_ushort,
+            npy_int, npy_uint,
+            npy_long, npy_ulong,
+            npy_longlong, npy_ulonglong,
+            npy_float, npy_double, npy_longdouble,
+            npy_cfloat, npy_cdouble, npy_clongdouble,
+            npy_object=17,
+            npy_string, npy_unicode,
+            npy_void,
+            /*
+             * new 1.6 types appended, may be integrated
+             * into the above in 2.0.
+             */
+            npy_datetime, npy_timedelta, npy_half,
+
+            npy_ntypes,
+            npy_notype,
+            // npy_char npy_attr_deprecate("use npy_string"),
+            npy_userdef=256,  /* leave room for characters */
+
+            /* the number of types not including the new 1.6 types */
+            npy_ntypes_abi_compatible=21
+        };
+
+
+        /// misc
         extern __gshared PyObject _Py_NoneStruct;
         void Py_IncRef(PyObject*);
+        void Py_DecRef(PyObject*);
 
         PyObject* newNone() {
             Py_IncRef(&_Py_NoneStruct);

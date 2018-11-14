@@ -2,6 +2,7 @@ module typeformat;
 
 import std.traits;
 import std.typecons;
+import mir.ndslice : isSlice;
 import pyobject; //  : PyObject;
 
 template formatTypes(Ts...) {
@@ -28,9 +29,11 @@ template formatTypes(Ts...) {
                 ret ~= formatTypes!(T.Types);
                 ret ~= ")";
             }
+            else static if (isSlice!T) {
+                ret ~= "O";
+            }
             else {
                 static assert(false, "unknown type to format: " ~ T.stringof);
-                // ret ~= "O";
             }
         }
         return ret;

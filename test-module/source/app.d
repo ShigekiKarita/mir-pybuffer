@@ -1,26 +1,38 @@
 import mir.ndslice;
 import wrapper : def, defModule;
+import std.stdio;
 
 double foo(long x) {
-    import std.stdio;
-    writeln(x);
     return x * 2;
 }
 
-string d2s(double d) {
+string baz(double d) {
     import std.conv;
     return d.to!string;
 }
 
-double sum(Slice!(double*, 2) x) {
-    return 1.0;
+auto bar(long i, double d) {
+    import std.typecons;
+    return tuple(i, tuple(tuple(d, i)));
+}
+
+// wip: returning slice is partially supported (as memoryview)
+Slice!(double*, 1) sum(Slice!(double*, 2) x, Slice!(double*, 1) y) {
+    auto z = y.slice; // copy
+    foreach (xi; x) {
+        z[] += xi;
+    }
+    return z;
 }
 
 mixin defModule!(
-    "libtest_module",
-    "this is D module",
+    "libtest_module", // module name
+    "this is D module", // module doc
+    // register d-func and doc under the module
     [def!(foo, "this is foo"),
-     def!(d2s, "this is d2s")]);
+     def!(baz, "this is baz"),
+     def!(bar, "this is bar"),
+     def!(sum, "this is sum")]);
 
 
 
